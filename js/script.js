@@ -4,8 +4,12 @@ let currfolder;
 
 async function getSongs(folder) {
   
-    currfolder=folder;
+    currfolder = folder;
     let response = await fetch(`/Spotifyclone/${folder}/`);
+    if (!response.ok) {
+        console.error(`Error fetching ${folder}: ${response.statusText}`);
+        return;
+    }
     let text = await response.text();
 
     let div = document.createElement("div");
@@ -64,6 +68,10 @@ async function main() {
     async function displayalbums() {
         let a = await fetch(`/Spotifyclone/songs/`);
         let response = await a.text();
+        if (!response.ok) {
+            console.error(`Error fetching songs: ${response.statusText}`);
+            return;
+        }
         let div = document.createElement("div");
         div.innerHTML = response;
 
@@ -81,6 +89,10 @@ async function main() {
                 
                 let a = await fetch(`/Spotifyclone/songs/${folder}/info.json`);
                 let response = await a.json();
+                if (!response.ok) {
+                    console.error(`Error fetching info.json: ${response.statusText}`);
+                    continue;
+                }
                 console.log(response);
                 
                 cardContainer.innerHTML = cardContainer.innerHTML + `<div data-folder="${folder}" class="card">
